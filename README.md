@@ -92,7 +92,8 @@ Details: [docs/architecture.md](docs/architecture.md). Trust boundaries and what
 
 ## What it does not do yet
 
-- No external operator has installed it. The install guide has been followed only by its author.
+- No external operator has installed it. The install guide has only been followed on the maintainer's own
+  machine (with an AI assistant running the commands).
 - The open catalog has 18 original checks: 17 product detectors and one CVE rule (Jenkins). A host that runs
   none of those products produces no findings, which is **not** a statement that it is secure.
 - No `confirmed` check is in the open catalog yet; today's CVE findings are `probable`.
