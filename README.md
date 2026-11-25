@@ -94,8 +94,9 @@ Details: [docs/architecture.md](docs/architecture.md). Trust boundaries and what
 
 - No external operator has installed it. The install guide has only been followed on the maintainer's own
   machine (with an AI assistant running the commands).
-- The open catalog has 18 original checks: 17 product detectors and one CVE rule (Jenkins). A host that runs
-  none of those products produces no findings, which is **not** a statement that it is secure.
+- The open catalog has 31 original checks: 17 product detectors and 14 CVE version rules over 12 products
+  (five of the CVEs are in CISA's Known Exploited Vulnerabilities list). A host that runs none of those
+  products produces no findings, which is **not** a statement that it is secure.
 - No `confirmed` check is in the open catalog yet; today's CVE findings are `probable`.
 - No vulnerability-database (NVD/CPE) matching, no host discovery, and no authenticated (SSH) checks in the open
   catalog.
