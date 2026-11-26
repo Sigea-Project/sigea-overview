@@ -48,3 +48,27 @@ twice from the package: with Docker Compose, and natively with the packaged cont
 PostgreSQL, validating generated systemd user units without enabling them. Both were run on the maintainer's
 machine, with an AI coding assistant executing the commands under the maintainer's direction. **No one outside the project has installed it yet**, which is the acceptance criterion for
 the first release.
+
+## 4. The first `confirmed` check
+
+**Setup.** Grafana 8.3.0 (affected by CVE-2021-43798, a path traversal in the plugin route) and 8.3.1 (fixed),
+official release archives with the published SHA-256 verified, each run on loopback. The scanner used a signed
+catalog with the Grafana detector, the version rule and one behavior probe.
+
+**The probe.** One GET asks the plugin route for a path with `../` segments that lands on Grafana's own
+`VERSION` file: a file outside the plugin directory whose only content is the version number. It never asks for
+a system, credential or configuration file. An affected release returns the file; a fixed one answers 404.
+
+| Grafana | Version rule | Probe | Report |
+|---|---|---|---|
+| 8.3.0 | in range: `probable` | returned `VERSION` | `observed`, `probable`, **`confirmed`** |
+| 8.3.1 | outside range: `refuted` | 404, says nothing | `observed`, `refuted` |
+
+**Design choices.** A first draft read the detected product and so reported `refuted` on 8.3.1 from the 404
+alone. A 404 also appears with another install layout, a proxy that normalizes the path, or a disabled plugin, so
+it cannot rule the weakness out. The probe now stands alone: a negative answer is "no finding", never a refutation,
+and only the version rule refutes a fixed release.
+
+**What this does not show.** One product, one CVE, loopback. The probe is sent to every HTTP endpoint in scope;
+a decoy web server received it during the test. Limiting a probe to endpoints where the product was identified
+needs an engine change that does not exist yet.
